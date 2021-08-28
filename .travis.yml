@@ -6,3 +6,4 @@ deploy:
   api-key:
     secure: $HEROKU_API_KEY
   app: planner-api-hackerearth
+  edge: true
