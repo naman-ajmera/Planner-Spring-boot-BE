@@ -1,5 +1,6 @@
 package com.example.Mercerdes.Hackerearth.Model;
 
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 @Document(collection = "Plan")
+@ApiModel(description = "Details about the Plan")
 public class Plan {
 
     @Id()
