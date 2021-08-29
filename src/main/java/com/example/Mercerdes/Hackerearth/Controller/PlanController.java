@@ -42,8 +42,8 @@ public class PlanController {
     }
 
     @PutMapping("/updatePlanById/{id}")
-    public void updatePlanById(@PathVariable int id,@RequestBody Plan plan){
-        planService.updatePlanById(id,plan);
+    public ResponseEntity<?> updatePlanById(@PathVariable int id,@RequestBody Plan plan){
+        return new ResponseEntity<>(planService.updatePlanById(id,plan),HttpStatus.OK);
     }
 
 }

@@ -41,7 +41,6 @@ public class PlanService {
 
         long id = generateSequence(SEQUENCE_NAME);
 
-
         endDateTime = endDateTime.plusMonths(2);
         plan.setStart_time(startDateTime.toString());
         plan.setEnd_time(endDateTime.toString());
@@ -72,11 +71,10 @@ public class PlanService {
     };
 
     public Plan savePlan(Plan plan){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime startDateTime = LocalDateTime.parse(plan.getStart_time(), formatter);
         LocalDateTime endDateTime = LocalDateTime.parse(plan.getEnd_time(), formatter);
         if(plan.getFrequency().equals("None")){
-            endDateTime = endDateTime.plusMonths(4);
             plan.setStart_time(startDateTime.toString());
             plan.setEnd_time(endDateTime.toString());
             plan.setId(generateSequence(SEQUENCE_NAME));
@@ -118,18 +116,21 @@ public class PlanService {
         return listOfPlansForToday;
     }
 
-    public void updatePlanById(int id, Plan plan){
+    public Plan updatePlanById(int id, Plan plan){
         Plan planById = planRepository.findById(id).get();
         planById.setStart_time(plan.getStart_time());
         planById.setEnd_time(plan.getEnd_time());
         planById.setName(plan.getName());
         planById.setFrequency(plan.getFrequency());
-        if(!plan.getFrequency().equals("None")){
-            for(Plan curr : planRepository.findAllByParentId(id)){
+        if(plan.getParentId()!=0){
+            for(Plan curr : planRepository.findAllByParentId(plan.getParentId())){
                 planRepository.delete(curr);
             }
         }
-        savePlan(planById);
+        else{
+            planRepository.deleteById((int)planById.getId());
+        }
+        return savePlan(planById);
     }
 
     public Plan getPlanById(int id){
